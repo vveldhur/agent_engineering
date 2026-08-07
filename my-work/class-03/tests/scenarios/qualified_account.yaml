@@ -1,0 +1,17 @@
+account:
+  name: "Apex Manufacturing Solutions"
+  industry: "Manufacturing"
+  employee_count: 500
+  region: "North America"
+  notes: "Apex is looking to upgrade their production tracking systems."
+objective: "Evaluate Apex Manufacturing Solutions for WidgetWare product fit and immediate readiness."
+evidence:
+  - claim: "Apex Manufacturing Solutions announced plans to build a new automated assembly plant."
+    classification: "verified_fact"
+    source:
+      name: "Apex Press Release (Test Fixture)"
+      url: "https://example.com/fixtures/apex-press-release"
+      retrieved_at: "2026-08-07"
+    excerpt: "Apex Manufacturing Solutions announced a multiyear facility expansion and plant-modernization initiative to build a new smart manufacturing site."
+state:
+  current_step: "initial_assessment"

@@ -1,0 +1,10 @@
+account:
+  name: "Unknown Corp"
+  industry: null
+  employee_count: null
+  region: "North America"
+  notes: "No detailed profile information exists for Unknown Corp."
+objective: "Evaluate Unknown Corp for WidgetWare product fit and immediate readiness."
+evidence: []
+state:
+  current_step: "initial_assessment"

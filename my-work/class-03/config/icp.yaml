@@ -1,0 +1,34 @@
+account_fit:
+  minimum_company_size: 100
+  preferred_industries:
+    - "Manufacturing"
+    - "Industrial Automation"
+    - "Automotive Manufacturing"
+    - "Aerospace Manufacturing"
+    - "Chemical Manufacturing"
+  excluded_industries:
+    - "Software"
+    - "Retail"
+    - "Financial Services"
+    - "Healthcare Providers"
+    - "Professional Services"
+  preferred_regions:
+    - "North America"
+    - "Europe"
+  required_account_fields:
+    - "name"
+    - "industry"
+    - "employee_count"
+    - "region"
+
+immediate_readiness:
+  buying_signals:
+    - "announcement of new plant construction or expansion"
+    - "active initiative or budget allocation to modernize plant operations"
+    - "recent hiring of leadership roles in automation, smart manufacturing, or Industry 4.0"
+    - "publicly stated targets for reducing production downtime or operational waste"
+    - "initiatives focusing on factory digitalization or legacy system migration"
+  evidence_indicators:
+    change: "Recent changes in operations leadership or facility expansion."
+    pain: "Reports or evidence of high equipment downtime or legacy system limitations."
+    timing: "Active fiscal year projects focusing on automation adoption or digitalization."

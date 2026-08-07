@@ -1,0 +1,17 @@
+account:
+  name: "ByteSoft Technologies"
+  industry: "Software"
+  employee_count: 50
+  region: "North America"
+  notes: "ByteSoft is a small software development agency."
+objective: "Evaluate ByteSoft Technologies for WidgetWare product fit and immediate readiness."
+evidence:
+  - claim: "ByteSoft is a software development and consulting firm."
+    classification: "verified_fact"
+    source:
+      name: "ByteSoft Website (Test Fixture)"
+      url: "https://example.com/fixtures/bytesoft-about"
+      retrieved_at: "2026-08-07"
+    excerpt: "ByteSoft is a boutique custom software and web development agency with 50 developers."
+state:
+  current_step: "initial_assessment"

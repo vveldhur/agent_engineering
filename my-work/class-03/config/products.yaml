@@ -1,0 +1,28 @@
+company:
+  name: "WidgetWare"
+  description: "WidgetWare sells software and services that help manufacturing and industrial-automation companies modernize plant operations and adopt AI-enabled automation."
+
+offerings:
+  - name: "Plant Operations Platform"
+    description: "A centralized software platform designed to modernize plant operations through real-time machinery monitoring, unified data ingestion, and operations visibility."
+    target_buyers:
+      - "Plant Managers"
+      - "Directors of Operations"
+      - "VP of Manufacturing"
+    approved_claims:
+      - "Ingests data from standard industrial protocols including Modbus and OPC UA."
+      - "Provides real-time visibility into machine status on the factory floor."
+      - "Supports custom dashboards tailored for shift supervisors and operations teams."
+      - "Consolidates multi-machine telemetry into a single unified view."
+
+  - name: "Industrial AI Accelerator"
+    description: "An AI-enabled automation suite that provides predictive maintenance insights and automated quality control analysis for industrial environments."
+    target_buyers:
+      - "VP of Automation"
+      - "Chief Technology Officer"
+      - "Maintenance Directors"
+    approved_claims:
+      - "Detects anomalies in sensor time-series data to flag potential equipment maintenance needs."
+      - "Deploys and executes machine learning inference models on localized edge gateways or cloud infrastructure."
+      - "Analyzes continuous vibration and temperature sensor readings to identify mechanical deviations."
+      - "Flags quality deviations in manufacturing cycles using real-time sensor patterns."
