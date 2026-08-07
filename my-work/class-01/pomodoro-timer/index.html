@@ -1,0 +1,332 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌸</text></svg>" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SereneFlow - Aesthetic Pomodoro Timer</title>
+    <!-- Preconnect to Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+    
+    <!-- Avoid Flash of Unstyled Content (FOUC) by loading stored theme instantly -->
+    <script>
+      (function() {
+        const storedTheme = localStorage.getItem("serene-aesthetic-theme") || "theme-sage";
+        const storedMode = localStorage.getItem("serene-color-mode") || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+        
+        document.documentElement.className = storedTheme;
+        document.documentElement.setAttribute("data-color-mode", storedMode);
+        document.documentElement.style.colorScheme = storedMode;
+      })();
+    </script>
+  </head>
+  <body>
+    <!-- Animated Ambient Backdrop Blobs -->
+    <div class="ambient-backdrop">
+      <div class="blob blob-1"></div>
+      <div class="blob blob-2"></div>
+      <div class="blob blob-3"></div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="app-container">
+      <!-- Top Navigation & Control Header -->
+      <header class="app-header">
+        <div class="brand">
+          <span class="brand-icon">🌸</span>
+          <h1 class="brand-title">SereneFlow</h1>
+        </div>
+        
+        <!-- Controls on Header -->
+        <div class="header-controls">
+          <!-- Ambient Sound Quick Mixer -->
+          <div class="ambient-sound-toggle-container">
+            <button id="ambient-mixer-btn" class="icon-btn" aria-label="Ambient Sound Mixer" title="Ambient Sounds">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-music"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>
+            </button>
+            
+            <!-- Quick Sound Popover Mixer Panel -->
+            <div id="ambient-popover" class="ambient-popover hidden">
+              <h3 class="popover-title">Ambient Atmosphere</h3>
+              <div class="sound-control-row">
+                <span class="sound-label">🌧️ Rain (Brownian)</span>
+                <button id="play-rain-btn" class="sound-play-btn" aria-label="Toggle Rain">Play</button>
+                <input id="rain-volume" type="range" min="0" max="1" step="0.05" value="0.5" class="sound-volume-slider" aria-label="Rain Volume">
+              </div>
+              <div class="sound-control-row">
+                <span class="sound-label">🌊 Ocean (White Noise)</span>
+                <button id="play-ocean-btn" class="sound-play-btn" aria-label="Toggle Ocean">Play</button>
+                <input id="ocean-volume" type="range" min="0" max="1" step="0.05" value="0.5" class="sound-volume-slider" aria-label="Ocean Volume">
+              </div>
+              <div class="sound-control-row">
+                <span class="sound-label">🔥 Campfire (Crackling)</span>
+                <button id="play-fire-btn" class="sound-play-btn" aria-label="Toggle Campfire">Play</button>
+                <input id="fire-volume" type="range" min="0" max="1" step="0.05" value="0.5" class="sound-volume-slider" aria-label="Campfire Volume">
+              </div>
+              <div class="sound-control-row">
+                <span class="sound-label">🍃 Soft Forest (Pink Noise)</span>
+                <button id="play-forest-btn" class="sound-play-btn" aria-label="Toggle Forest">Play</button>
+                <input id="forest-volume" type="range" min="0" max="1" step="0.05" value="0.5" class="sound-volume-slider" aria-label="Forest Volume">
+              </div>
+              <div class="sound-control-row master-volume-row">
+                <span class="sound-label font-bold">Master Volume</span>
+                <input id="master-volume" type="range" min="0" max="1" step="0.05" value="0.8" class="sound-volume-slider" aria-label="Master Volume">
+              </div>
+            </div>
+          </div>
+
+          <!-- Theme Select Button -->
+          <button id="theme-btn" class="icon-btn" aria-label="Change Theme Palette" title="Change Theme Palette">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-droplet"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path></svg>
+          </button>
+          
+          <!-- Theme Palette Selector Popup -->
+          <div id="theme-popover" class="theme-popover hidden">
+            <h3 class="popover-title">Select Atmosphere</h3>
+            <div class="theme-options">
+              <button class="theme-option-btn theme-sage" data-theme="theme-sage">
+                <span class="color-dot sage"></span> Sage Forest
+              </button>
+              <button class="theme-option-btn theme-sand" data-theme="theme-sand">
+                <span class="color-dot sand"></span> Warm Sand
+              </button>
+              <button class="theme-option-btn theme-ocean" data-theme="theme-ocean">
+                <span class="color-dot ocean"></span> Cosmic Ocean
+              </button>
+              <button class="theme-option-btn theme-rose" data-theme="theme-rose">
+                <span class="color-dot rose"></span> Sunset Rose
+              </button>
+            </div>
+            <hr class="popover-divider">
+            <button id="dark-mode-toggle" class="dark-mode-toggle-btn">
+              <span class="mode-icon">🌙</span> <span id="mode-text">Dark Mode</span>
+            </button>
+          </div>
+
+          <!-- Settings Button -->
+          <button id="settings-btn" class="icon-btn" aria-label="Timer Settings" title="Timer Settings">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-settings"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+          </button>
+        </div>
+      </header>
+
+      <!-- Main Layout Content -->
+      <main class="app-content">
+        <!-- LEFT COLUMN: Timer & Active Task Display -->
+        <section class="timer-section">
+          <!-- Timer Navigation Modes -->
+          <nav class="timer-modes" aria-label="Timer modes">
+            <button id="mode-work" class="mode-btn active" data-mode="work">Focus</button>
+            <button id="mode-short" class="mode-btn" data-mode="short">Short Break</button>
+            <button id="mode-long" class="mode-btn" data-mode="long">Long Break</button>
+          </nav>
+
+          <!-- Timer Clock Card -->
+          <div class="timer-display-card">
+            <!-- Breath Pulsing Halo Glow -->
+            <div id="timer-glow" class="timer-glow"></div>
+            
+            <!-- Circular Countdown Progress SVG -->
+            <div class="circular-progress-container">
+              <svg class="progress-svg" viewBox="0 0 200 200">
+                <circle class="progress-bg" cx="100" cy="100" r="88" />
+                <circle id="progress-bar" class="progress-fill" cx="100" cy="100" r="88" stroke-dasharray="552.92" stroke-dashoffset="0" />
+              </svg>
+              
+              <!-- Timer Digits -->
+              <div class="timer-digits-container">
+                <time id="time-display" class="time-display">25:00</time>
+                <div id="timer-status-text" class="status-label">Ready to Focus</div>
+              </div>
+            </div>
+
+            <!-- Breathing Guide Overlay (Shown during Focus when configured) -->
+            <div id="breathing-guide" class="breathing-guide hidden">
+              <div class="breath-text">Inhale...</div>
+            </div>
+          </div>
+
+          <!-- Timer Control Buttons -->
+          <div class="timer-actions">
+            <button id="reset-timer-btn" class="action-btn secondary" aria-label="Reset Timer">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-rotate-ccw"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><polyline points="3 3 3 8 8 8"></polyline></svg>
+            </button>
+            
+            <button id="play-timer-btn" class="action-btn primary" aria-label="Start Timer">
+              <svg id="play-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-play"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+              <svg id="pause-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-pause hidden"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>
+            </button>
+            
+            <button id="skip-timer-btn" class="action-btn secondary" aria-label="Skip Session">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-fast-forward"><polygon points="5 4 15 12 5 20 5 4"></polygon><polygon points="14 4 23 12 14 20 14 4"></polygon></svg>
+            </button>
+          </div>
+
+          <!-- Active Task Display Panel -->
+          <div id="active-task-banner" class="active-task-banner hidden">
+            <span class="banner-sub">Focusing on:</span>
+            <div class="banner-main">
+              <h2 id="active-task-title" class="active-task-title">Design website dashboard</h2>
+              <button id="complete-active-task-btn" class="complete-active-task-btn" aria-label="Complete Active Task">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              </button>
+            </div>
+            <div class="banner-progress">
+              <span id="active-task-poms">Intervals: 🍅 0 / 2</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- RIGHT COLUMN: Task Manager & Statistics Dashboard -->
+        <section class="task-stats-section">
+          <!-- Daily statistics dashboard -->
+          <div class="stats-dashboard">
+            <h2 class="section-title">Today's Flow</h2>
+            <div class="stats-grid">
+              <div class="stat-card">
+                <div class="stat-svg-container">
+                  <svg class="stat-progress-svg" viewBox="0 0 100 100">
+                    <circle class="stat-progress-bg" cx="50" cy="50" r="42" />
+                    <circle id="daily-progress-ring" class="stat-progress-fill" cx="50" cy="50" r="42" stroke-dasharray="263.89" stroke-dashoffset="263.89" />
+                  </svg>
+                  <div class="stat-svg-text">
+                    <span id="completed-sessions-count">0</span>
+                    <span id="sessions-goal-denominator">/4</span>
+                  </div>
+                </div>
+                <div class="stat-info">
+                  <span class="stat-metric-label">Completed Intervals</span>
+                  <span id="stat-goal-reached" class="stat-subtext">Goal: 0% completed</span>
+                </div>
+              </div>
+              
+              <div class="stat-card text-stats">
+                <div class="metric-container">
+                  <div class="metric-box">
+                    <span id="total-focus-mins" class="metric-val">0</span>
+                    <span class="metric-unit">mins</span>
+                    <span class="metric-label">Focus Time</span>
+                  </div>
+                  <div class="metric-box">
+                    <span id="streak-days" class="metric-val">0</span>
+                    <span class="metric-unit">days</span>
+                    <span class="metric-label">Focus Streak</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Minimalist Task Manager -->
+          <div class="task-manager">
+            <div class="task-header-row">
+              <h2 class="section-title">Focus Tasks</h2>
+              <span id="tasks-remaining-badge" class="task-count-badge">0 tasks</span>
+            </div>
+
+            <!-- Task Add Form -->
+            <form id="add-task-form" class="add-task-form">
+              <div class="add-task-input-wrapper">
+                <input id="new-task-input" type="text" placeholder="What would you like to focus on?" required class="new-task-input" autocomplete="off">
+              </div>
+              <div class="add-task-details">
+                <div class="pom-est-container">
+                  <label for="new-task-poms" class="est-label">Estimated Intervals:</label>
+                  <div class="poms-selector">
+                    <button type="button" id="decrease-poms-btn" class="pom-control-btn" aria-label="Decrease Pomodoros">-</button>
+                    <span id="new-task-poms-display" class="poms-display">2</span>
+                    <button type="button" id="increase-poms-btn" class="pom-control-btn" aria-label="Increase Pomodoros">+</button>
+                  </div>
+                </div>
+                <button type="submit" class="add-task-submit-btn">Add Task</button>
+              </div>
+            </form>
+
+            <!-- Tasks Scrollable List -->
+            <div class="tasks-scrollport">
+              <ul id="task-list" class="task-list">
+                <!-- Task items injected here dynamically -->
+              </ul>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <!-- App Dialog / Settings Modal -->
+    <dialog id="settings-dialog" class="settings-dialog">
+      <div class="dialog-header">
+        <h2>Timer Configuration</h2>
+        <button id="close-settings-dialog-btn" class="close-dialog-btn" aria-label="Close Settings">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+
+      <form id="settings-form" method="dialog" class="settings-form">
+        <!-- Durations Grid -->
+        <div class="settings-section">
+          <h3>Interval Durations (Minutes)</h3>
+          <div class="settings-grid-3">
+            <div class="form-group">
+              <label for="settings-duration-work">Focus Time</label>
+              <input type="number" id="settings-duration-work" min="1" max="180" required value="25" class="form-control">
+            </div>
+            <div class="form-group">
+              <label for="settings-duration-short">Short Break</label>
+              <input type="number" id="settings-duration-short" min="1" max="60" required value="5" class="form-control">
+            </div>
+            <div class="form-group">
+              <label for="settings-duration-long">Long Break</label>
+              <input type="number" id="settings-duration-long" min="1" max="120" required value="15" class="form-control">
+            </div>
+          </div>
+        </div>
+
+        <!-- General Settings -->
+        <div class="settings-section">
+          <h3>Automation & Focus Behavior</h3>
+          <div class="form-group-checkbox">
+            <input type="checkbox" id="settings-auto-start-breaks" class="checkbox-control">
+            <label for="settings-auto-start-breaks">Auto-start Breaks</label>
+          </div>
+          <div class="form-group-checkbox">
+            <input type="checkbox" id="settings-auto-start-pomodoros" class="checkbox-control">
+            <label for="settings-auto-start-pomodoros">Auto-start Focus Sessions</label>
+          </div>
+          <div class="form-group-checkbox">
+            <input type="checkbox" id="settings-ticking-sound" class="checkbox-control">
+            <label for="settings-ticking-sound">Tick-tock sound during focus</label>
+          </div>
+          <div class="form-group-checkbox">
+            <input type="checkbox" id="settings-breath-animation" class="checkbox-control" checked>
+            <label for="settings-breath-animation">Guided breathing helper (subtle breathing pulse)</label>
+          </div>
+        </div>
+
+        <!-- Target Settings -->
+        <div class="settings-section">
+          <h3>Daily Target</h3>
+          <div class="settings-grid-2">
+            <div class="form-group">
+              <label for="settings-daily-goal">Daily Goal (Intervals)</label>
+              <input type="number" id="settings-daily-goal" min="1" max="24" required value="4" class="form-control">
+            </div>
+            <div class="form-group">
+              <label for="settings-long-interval">Long Break Interval (Focus Sessions)</label>
+              <input type="number" id="settings-long-interval" min="1" max="10" required value="4" class="form-control">
+            </div>
+          </div>
+        </div>
+
+        <div class="dialog-actions">
+          <button type="button" id="reset-defaults-settings-btn" class="dialog-btn text-btn">Reset Defaults</button>
+          <button type="submit" class="dialog-btn filled-btn">Save Changes</button>
+        </div>
+      </form>
+    </dialog>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

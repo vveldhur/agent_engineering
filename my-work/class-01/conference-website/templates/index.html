@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ conference.name }}</title>
+    <meta name="description" content="Join the {{ conference.name }} covering the latest Google Cloud Technologies. Explore serverless, AI/ML, and analytics.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body class="dark-theme">
+    <!-- Background glow blobs -->
+    <div class="glow-blob glow-blue"></div>
+    <div class="glow-blob glow-red"></div>
+    <div class="glow-blob glow-green"></div>
+
+    <header class="site-header">
+        <div class="header-container">
+            <div class="brand">
+                <i class="fa-solid fa-cloud brand-icon"></i>
+                <span>GCP Summit '26</span>
+            </div>
+            <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle dark/light theme" title="Toggle theme">
+                <i class="fa-solid fa-sun icon-sun"></i>
+                <i class="fa-solid fa-moon icon-moon"></i>
+            </button>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="hero-tag">Annual Technical Conference</div>
+            <h1 class="hero-title">{{ conference.name }}</h1>
+            <p class="hero-subtitle">Exploring the future of cloud computing, databases, serverless, and GenAI on Google Cloud Platform.</p>
+            
+            <div class="event-meta-cards">
+                <div class="meta-card">
+                    <i class="fa-solid fa-calendar-days meta-icon icon-blue"></i>
+                    <div>
+                        <span class="meta-label">Date</span>
+                        <span class="meta-value" id="current-date-display">{{ conference.date }}</span>
+                    </div>
+                </div>
+                <div class="meta-card">
+                    <i class="fa-solid fa-map-pin meta-icon icon-red"></i>
+                    <div>
+                        <span class="meta-label">Location</span>
+                        <span class="meta-value">{{ conference.location }}</span>
+                    </div>
+                </div>
+                <div class="meta-card">
+                    <i class="fa-solid fa-hourglass-half meta-icon icon-yellow"></i>
+                    <div>
+                        <span class="meta-label">Status</span>
+                        <span class="meta-value" id="live-status">Starts in 9:00 AM</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stats Overview -->
+        <section class="stats-section">
+            <div class="stat-item">
+                <span class="stat-number">8</span>
+                <span class="stat-text">Technical Talks</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">12</span>
+                <span class="stat-text">Expert Speakers</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">60m</span>
+                <span class="stat-text">Lunch & Networking</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">2</span>
+                <span class="stat-text">Tracks Combined</span>
+            </div>
+        </section>
+
+        <!-- Search and Filter Controls -->
+        <section class="controls-section">
+            <div class="search-bar-container">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                <input type="text" id="search-input" placeholder="Search talk titles, speakers, or description..." aria-label="Search sessions">
+                <button id="search-reset" class="search-clear-btn" aria-label="Clear search" style="display: none;">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div class="filter-group">
+                <span class="filter-label">Categories:</span>
+                <div class="filter-chips">
+                    <button id="filter-all" class="chip active" data-category="all">All Sessions</button>
+                    <button id="filter-cat-1" class="chip" data-category="1">
+                        <span class="dot dot-infra"></span>{{ categories[1] }}
+                    </button>
+                    <button id="filter-cat-2" class="chip" data-category="2">
+                        <span class="dot dot-data"></span>{{ categories[2] }}
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Schedule Timeline -->
+        <section class="schedule-section">
+            <div class="timeline-container">
+                <div class="timeline-line"></div>
+                
+                <div id="talks-list" class="timeline-items">
+                    <!-- Javascript will render dynamic timeline items here, and Flask provides a static fallback for SEO -->
+                    {% for talk in talks %}
+                    
+                    <!-- Insert Lunch Break before Talk 5 -->
+                    {% if talk.id == 5 %}
+                    <div class="timeline-item lunch-break-item" data-type="break">
+                        <div class="timeline-badge-container">
+                            <div class="timeline-badge break-badge">
+                                <i class="fa-solid fa-utensils"></i>
+                            </div>
+                        </div>
+                        <div class="timeline-content break-card">
+                            <div class="break-time-badge">
+                                <i class="fa-regular fa-clock"></i> 12:00 PM - 01:00 PM (60 Mins)
+                            </div>
+                            <h3 class="break-title">Lunch & Networking Break</h3>
+                            <p class="break-description">Enjoy a curated lunch box at the main hall and connect with fellow developers, cloud architects, and Google developer advocates.</p>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <div class="timeline-item talk-item" data-id="{{ talk.id }}" data-category="{{ talk.category_id }}" data-title="{{ talk.title|lower }}" data-speakers="{% for s in talk.speakers %}{{ s.first_name|lower }} {{ s.last_name|lower }} {% endfor %}">
+                        <div class="timeline-badge-container">
+                            <div class="timeline-badge cat-{{ talk.category_id }}-badge">
+                                {{ talk.id }}
+                            </div>
+                        </div>
+                        
+                        <div class="timeline-content talk-card">
+                            <div class="card-header">
+                                <div class="time-duration">
+                                    <span class="time"><i class="fa-regular fa-clock"></i> {{ talk.start_time }} - {{ talk.end_time }}</span>
+                                    <span class="duration">{{ talk.duration_minutes }} Mins</span>
+                                </div>
+                                <span class="category-tag cat-{{ talk.category_id }}">
+                                    {{ talk.category_name }}
+                                </span>
+                            </div>
+
+                            <h3 class="talk-title">{{ talk.title }}</h3>
+                            <p class="talk-description">{{ talk.description }}</p>
+
+                            <div class="speakers-section">
+                                <span class="speakers-label">Presented by:</span>
+                                <div class="speakers-list">
+                                    {% for speaker in talk.speakers %}
+                                    <div class="speaker-avatar-card">
+                                        <div class="speaker-avatar">
+                                            {{ speaker.first_name[0] }}{{ speaker.last_name[0] }}
+                                        </div>
+                                        <div class="speaker-info">
+                                            <span class="speaker-name">{{ speaker.first_name }} {{ speaker.last_name }}</span>
+                                            <a href="{{ speaker.linkedin }}" class="speaker-linkedin" target="_blank" rel="noopener noreferrer" title="LinkedIn Profile" aria-label="{{ speaker.first_name }} {{ speaker.last_name }}'s LinkedIn Profile">
+                                                <i class="fa-brands fa-linkedin"></i> linkedin.com/in
+                                            </a>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                
+                <!-- Empty Search State -->
+                <div id="empty-state" class="empty-state-card" style="display: none;">
+                    <i class="fa-solid fa-magnifying-glass-minus empty-icon"></i>
+                    <h3>No Sessions Found</h3>
+                    <p>We couldn't find any talks matching your search criteria. Try modifying your keywords or resetting filters.</p>
+                    <button id="reset-empty-btn" class="btn-primary">Reset Filters</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <p>&copy; 2026 Google Cloud Innovations Summit. Built for demonstration purposes with Python Flask.</p>
+        <div class="footer-links">
+            <a href="https://cloud.google.com" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-google"></i> Google Cloud</a>
+            <a href="https://github.com" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-github"></i> Repository</a>
+        </div>
+    </footer>
+
+    <!-- Initial state injection from server to JS -->
+    <script>
+        window.conferenceData = {
+            talks: {{ talks|tojson }},
+            categories: {{ categories|tojson }},
+            conference: {{ conference|tojson }}
+        };
+    </script>
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

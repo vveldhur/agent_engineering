@@ -1,0 +1,31 @@
+{
+  "name": "gnews-cli",
+  "version": "1.0.0",
+  "description": "A feature-rich command-line application to fetch and read the latest Google News.",
+  "main": "src/index.js",
+  "type": "module",
+  "bin": {
+    "gnews": "./src/index.js"
+  },
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "node --test"
+  },
+  "keywords": [
+    "cli",
+    "news",
+    "google-news",
+    "rss",
+    "terminal"
+  ],
+  "author": "Antigravity",
+  "license": "MIT",
+  "dependencies": {
+    "@inquirer/prompts": "^7.1.0",
+    "chalk": "^5.3.0",
+    "commander": "^12.1.0",
+    "open": "^10.1.0",
+    "ora": "^8.1.1",
+    "rss-parser": "^3.13.0"
+  }
+}
